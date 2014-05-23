@@ -23,6 +23,17 @@ function success(pos) {
 			$('.js-windspeed').text(data.currently.windSpeed + ' m/s');
 		}
 	});
+
+	$.ajax({
+		url: 'https://maps.googleapis.com/maps/api/geocode/json',
+		data: {
+			latlng: crd.latitude + ',' + crd.longitude,
+			sensor: true
+		},
+		success: function(data) {
+			console.log(data);
+		}
+	});
 }
 
 function error(err) {
