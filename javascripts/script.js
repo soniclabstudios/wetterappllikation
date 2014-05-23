@@ -32,7 +32,7 @@ function success(pos) {
 		},
 		success: function(data) {
 			console.log(data);
-			$('.js-address').text(data.results[0].formtatted_address);
+			$('.js-address').text(data.results[0].formatted_address);
 		}
 	});
 }
