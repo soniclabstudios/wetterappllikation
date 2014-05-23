@@ -20,7 +20,7 @@ function success(pos) {
 		success: function(data) {
 			console.log(data);
 			$('.js-temp').text(data.currently.apparentTemperature + ' °C');
-			$('.js-windspeed').text(data.currently.windSpeed + ' °m/s');
+			$('.js-windspeed').text(data.currently.windSpeed + ' m/s');
 		}
 	});
 }
