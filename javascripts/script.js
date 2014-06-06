@@ -12,33 +12,24 @@ function success(pos) {
 	$('.js-acc').text(crd.accuracy + ' m');
 
 	$.ajax({
-		url: 'https://api.forecast.io/forecast/a955df0e9afe8c822ebb3adf30265fb6/' + crd.latitude + ',' + crd.longitude,
-		data: {
-			units : 'si'
-		},
-		dataType: 'jsonp',
-		success: function(data) {
-			console.log(data);
-			$('.js-temp').text(data.currently.apparentTemperature + ' °C');
-			$('.js-windspeed').text(data.currently.windSpeed + ' m/s');
-		}
-	});
-
-	$.ajax({
 		url: 'https://maps.googleapis.com/maps/api/geocode/json',
 		data: {
 			latlng: crd.latitude + ',' + crd.longitude,
 			sensor: true
 		},
 		success: function(data) {
-			console.log(data);
 			$('.js-address').text(data.results[0].formatted_address);
 		}
+	});
+
+	getWeahterData(crd.latitude, crd.longitude, function(data) {
+		$('.js-temp').text(data.currently.apparentTemperature + ' °C');
+		$('.js-windspeed').text(data.currently.windSpeed + ' m/s');
 	});
 }
 
 function error(err) {
-  console.warn('ERROR(' + err.code + '): ' + err.message);
+	console.warn('ERROR(' + err.code + '): ' + err.message);
 }
 
 navigator.geolocation.getCurrentPosition(success, error, options);
@@ -57,12 +48,28 @@ $('.js-custom-address').on('click', 'a', function(event) {
 			sensor: false
 		},
 		success: function(data) {
-			console.log(data);
 			$('.js-custom-address-result').text(
 				data.results[0].geometry.location.lat +
 				',' +
 				data.results[0].geometry.location.lng
 			);
+
+			getWeahterData(data.results[0].geometry.location.lat, data.results[0].geometry.location.lng, function(data) {
+				$('.js-custom-address-temp').text(data.currently.apparentTemperature + ' °C');
+			});
 		}
 	});
 });
+
+var getWeahterData = function(lat, lng, callback) {
+	$.ajax({
+		url: 'https://api.forecast.io/forecast/a955df0e9afe8c822ebb3adf30265fb6/' + lat + ',' + lng,
+		data: {
+			units : 'si'
+		},
+		dataType: 'jsonp',
+		success: function(data) {
+			callback(data);
+		}
+	});
+};
