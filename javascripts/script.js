@@ -45,13 +45,24 @@ navigator.geolocation.getCurrentPosition(success, error, options);
 
 // http://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&sensor=true_or_false
 
-$.ajax({
-	url: 'http://maps.googleapis.com/maps/api/geocode/json',
-	data: {
-		address: 'Teufenerstrasse+19,+9000+St.+Gallen',
-		sensor: false
-	},
-	success: function(data) {
-		console.log(data);
-	}
+$('.js-custom-address').on('click', 'a', function(event) {
+	event.preventDefault();
+
+	var address = $('input', '.js-custom-address').val();
+
+	$.ajax({
+		url: 'http://maps.googleapis.com/maps/api/geocode/json',
+		data: {
+			address: address,
+			sensor: false
+		},
+		success: function(data) {
+			console.log(data);
+			$('.js-custom-address-result').text(
+				data.results[0].geometry.location.lat +
+				',' +
+				data.results[0].geometry.location.lng
+			);
+		}
+	});
 });
